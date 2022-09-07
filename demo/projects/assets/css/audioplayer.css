@@ -1,0 +1,184 @@
+* {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    user-select: none;
+}
+
+.contain {
+    background-color: #f0ece3;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.audio {
+    overflow: hidden;
+    width: 500px;
+    height: 150px;
+    border-radius: 10px;
+    position: relative;
+}
+
+.audio .bg{
+    background-image: url("https://p2.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 500px;
+    height: 150px;
+    filter: blur(6px) brightness(0.8) contrast(1.2);
+}
+
+.disk {
+    background-color: black;
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    top: calc(100% - 50% - 60px);
+    left: 20px;
+    border-radius: 50%;
+}
+
+.disk .singer {
+    background-image: url("https://p2.music.126.net/6y-UleORITEDbvrOLV0Q8A==/5639395138885805.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    position: absolute;
+    top: calc(100% - 50% - 40px);
+    left: calc(100% - 50% - 40px);
+}
+
+@keyframes singer {
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+}
+
+.disk .cdtou {
+    background-image: url("../images/cd_tou.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 25px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 90%;
+    transform-origin: right top;
+    transform: rotateZ(-20deg);
+    transition: transform .4s;
+}
+
+.details {
+    width: 300px;
+    height: 150px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.name {
+    align-self: start;
+    color: white;
+    font-size: 16px;
+}
+
+.singername {
+    align-self: start;
+    color: #e3e3e3;
+    font-size: 12px;
+}
+
+@font-face {
+    font-family: 'iconfont';
+    src: url('../font_n5roio5lkr/iconfont.eot');
+    src: url('../font_n5roio5lkr/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('../font_n5roio5lkr/iconfont.woff2') format('woff2'),
+    url('../font_n5roio5lkr/iconfont.woff') format('woff'),
+    url('../font_n5roio5lkr/iconfont.ttf') format('truetype'),
+    url('../font_n5roio5lkr/iconfont.svg#iconfont') format('svg');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 24px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: white;
+    cursor: pointer;
+}
+
+.controlsbox {
+    width: 300px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.key {
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.key input {
+    margin-right: 30px;
+    width: 100px;
+}
+
+.volume {
+    /* display: flex; */
+    
+}
+
+.progressbar {
+    width: 270px;
+    align-self: start;
+}
+
+.progressbar input {
+    width: 270px;
+}
+
+.time {
+    display: flex;
+    justify-content: space-between;
+}
+
+.time span {
+    color: white;
+    font-size: 10px;
+}
+
+.list {
+    background-color: #3e3e3e;
+    width: 500px;
+    height: 100px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.list li {
+    color: #f0f0f0;
+    font-size: 14px;
+    font-weight: 300;
+    margin-top: 8px;
+    margin-left: 14px;
+    cursor: pointer;
+}

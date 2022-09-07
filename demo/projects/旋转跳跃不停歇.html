@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2d3d效果</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        .desktop {
+            background-color: #eee;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            
+            /* 使子元素换行并居中 */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .box {
+            background-color: white;
+            width: 10rem;
+            height: 12rem;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .conbg {
+            background-color: #e0e0e0;
+            width: 6rem;
+            height: 6rem;
+            margin: 2rem;
+            cursor: pointer;
+        }
+        
+        .conchange {
+            background-color: rgba(0,0,255,.4);
+            width: 6rem;
+            height: 6rem;
+                        
+            /* 过渡属性 */
+            transition: all .25s linear;
+        }
+
+        .text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            width: 100%;
+            text-align: center;
+        }
+
+        .con1:hover .conchange {
+            transform: rotate(45deg);
+        }
+
+        .con2:hover .conchange {
+            transform: rotateX(45deg);
+        }
+
+        .con3:hover .conchange {
+            transform: rotateY(45deg);
+        }
+
+        .con4:hover .conchange {
+            transform: rotateZ(45deg);
+        }
+
+        .con5:hover .conchange {
+            transform: scale(2);
+        }
+
+        .con6:hover .conchange {
+            transform: scaleX(2);
+        }
+
+        .con7:hover .conchange {
+            transform: scaleY(2);
+        }
+
+        .con8:hover .conchange {
+            transform: skew(45deg, 45deg);
+        }
+
+        .con9:hover .conchange {
+            transform: skewX(45deg);
+        }
+
+        .con10:hover .conchange {
+            transform: skewY(45deg);
+        }
+
+        .con11:hover .conchange {
+            transform: translate(45px);
+        }
+
+        .con12:hover .conchange {
+            transform: translateX(45px);
+        }
+
+        .con13:hover .conchange {
+            transform: translateY(45px);
+        }
+
+        .con14:hover .conchange {
+            transform: matrix(2,2,0,2,45,0);
+        }
+
+        .perspective1 {
+            perspective: 100px;
+        }
+
+        .con15:hover .conchange {
+            transform: rotateX(45deg);
+        }
+
+        .con16:hover .conchange {
+            transform: rotateY(45deg);
+        }
+
+        .perspective2 {
+            perspective: 200px;
+        }
+
+        .con17:hover .conchange {
+            transform: rotateX(45deg);
+        }
+
+        .con18:hover .conchange {
+            transform: rotateY(45deg);
+        }
+
+        .con19 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con19:hover .conchange {
+            transform: rotate(45deg);
+        }
+
+        .con20 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con20:hover .conchange {
+            transform: rotate(45deg);
+        }
+
+        .con21 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con21:hover .conchange {
+            transform: rotateX(45deg);
+        }
+
+        .con22 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con22:hover .conchange {
+            transform: rotateX(45deg);
+        }
+
+        .con23 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con23:hover .conchange {
+            transform: rotateY(45deg);
+        }
+
+        .con24 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con24:hover .conchange {
+            transform: rotateY(45deg);
+        }
+
+        .con25 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con25:hover .conchange {
+            transform: scale(2);
+        }
+
+        .con26 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con26:hover .conchange {
+            transform: scale(2);
+        }
+
+        .con27 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con27:hover .conchange {
+            transform: scaleX(2);
+        }
+
+        .con28 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con28:hover .conchange {
+            transform: scaleX(2);
+        }
+
+        .con29 .conchange{
+            transform-origin : 100% 0 0;
+        }
+        .con29:hover .conchange {
+            transform: scaleY(2);
+        }
+
+        .con30 .conchange{
+            transform-origin : 0 100% 0;
+        }
+        .con30:hover .conchange {
+            transform: scaleY(2);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 主页面 -->
+    <div class="desktop">  
+
+        <div class="text">Css3 Transform</div>
+
+        <div class="box">
+            rotate(45deg)
+            <div class="conbg con1">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            rotateX(45deg)
+            <div class="conbg con2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            rotateY(45deg)
+            <div class="conbg con3">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            rotateZ(45deg)
+            <div class="conbg con4">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            scale(2)
+            <div class="conbg con5">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            scaleX(2)
+            <div class="conbg con6">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            scaleY(2)
+            <div class="conbg con7">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            skew(45deg, 45deg)
+            <div class="conbg con8">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            skewX(45deg)
+            <div class="conbg con9">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            skewY(45deg)
+            <div class="conbg con10">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            translate(45px)
+            <div class="conbg con11">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            translateX(45px)
+            <div class="conbg con12">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            translateY(45px)
+            <div class="conbg con13">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            matrix(2,2,0,2,45,0)
+            <div class="conbg con14">
+                <div class="conchange"></div>
+            </div>
+        </div>
+
+        <div class="text">Perspective : 100</div>
+
+        <div class="box">
+            rotateX(45deg)
+            <div class="conbg con15 perspective1">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            rotateY(45deg)
+            <div class="conbg con16 perspective1">
+                <div class="conchange"></div>
+            </div>
+        </div>
+
+        <div class="text">Perspective : 200</div>
+
+        <div class="box">
+            rotateX(45deg)
+            <div class="conbg con17 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            rotateY(45deg)
+            <div class="conbg con18 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+
+        <div class="text">Transform origin</div>
+
+        <div class="box">
+            transform-origin : 100% 0 0 rotate(45deg)
+            <div class="conbg con19">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 rotate(45deg)
+            <div class="conbg con20">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 rotateX(45deg)
+            <div class="conbg con21 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 100% 0 0 rotateX(45deg)
+            <div class="conbg con22 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 rotateY(45deg)
+            <div class="conbg con23 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 100% 0 0 rotateY(45deg)
+            <div class="conbg con24 perspective2">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 100% 0 0 scale(2)
+            <div class="conbg con25">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 scale(2)
+            <div class="conbg con26">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 100% 0 0 scaleX(2)
+            <div class="conbg con27">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 scaleX(2)
+            <div class="conbg con28">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 100% 0 0 scaleY(2)
+            <div class="conbg con29">
+                <div class="conchange"></div>
+            </div>
+        </div>
+        <div class="box">
+            transform-origin : 0 100% 0 scaleY(2)
+            <div class="conbg con30">
+                <div class="conchange"></div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

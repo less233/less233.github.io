@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .myContain {
+            background-color: #fff;
+            width: 100%;
+            height: 18px;
+            margin: 10px auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .myContain .mySlider {
+            background-color: #ebedf0;
+            width: 100%;
+            height: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .myContain .mySlider .myCircle {
+            background-color: #fff;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            box-shadow: 0 0 2px 1px #bbb;
+            position: absolute;
+            top: -7px;
+            cursor: grab;
+        }
+
+        .myContain .mySlider .myContent {
+            background-color: #1989fa;
+            width: 180px;
+            height: 4px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        p {
+            padding: 0 20px;
+            margin: 20px 0 10px 0;
+        }
+
+        .color {
+            /* background-color: #eee; */
+            width: 100%;
+            height: 100px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <p>红 {{red}}</p>
+        <my-slider @percent="changeRed" color="red"></my-slider>
+        <p>绿 {{green}}</p>
+        <my-slider @percent="changeGreen" color="green"></my-slider>
+        <p>蓝 {{blue}}</p>
+        <my-slider @percent="changeBlue" color="blue"></my-slider>
+
+        <div class="color" :style="{backgroundColor:bgc}"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script>
+        new Vue({
+            el: '#app',
+
+            data: {
+                red: 0,
+                green: 0,
+                blue: 0,
+                bgc: '',
+            },
+
+            methods: {
+                changeRed(val) {
+                    this.red = val;
+                    this.bgc = 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+                    console.log(this.bgc)
+                },
+
+                changeGreen(val) {
+                    this.green = val;
+                    this.bgc = 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+                },
+
+                changeBlue(val) {
+                    this.blue = val;
+                    this.bgc = 'rgb(' + this.red + ',' + this.green + ',' + this.blue + ')';
+                }
+            },
+
+            components: {
+                mySlider: {
+                    template: `
+                        <div class="myContain" @touchstart="handleStart">
+                            <div class="mySlider" ref="sliber">
+                                <div class="myContent" :style="[{width:width+'px'},{backgroundColor:color}]"></div>
+                                <div class="myCircle" :style="{left:left+'px'}" @touchstart="handleStart" @touchmove="handleMove"></div>
+                            </div>
+                        </div>
+                    `,
+
+                    props: {
+                        color: {
+                            type: String,
+                            default: 'blue'
+                        }
+                    },
+
+                    data() {
+                        return {
+                            offsetWidth: 0,
+                            width: 0,
+                            left: -9,
+                        }
+                    },
+
+                    methods: {
+                        handleStart(event) {
+                            let startX = event.touches[0].pageX.toFixed(0);
+                            this.left = startX - 29;
+                            this.computeLeft();
+                            this.width = this.left + 9;
+
+                            this.computePercent();
+                        },
+
+                        handleMove(event) {
+                            let moveX = event.touches[0].pageX.toFixed(0);
+                            this.left = moveX - 29;
+                            this.computeLeft();
+                            this.width = this.left + 9;
+
+                            this.computePercent();
+                        },
+
+                        computeLeft() {
+                            this.left = this.left <= -9 ? -9 : this.left >= this.offsetWidth - 9 ? this
+                                .offsetWidth - 9 : this.left;
+                        },
+
+                        computePercent() {
+                            let percent = (this.width / this.offsetWidth) * 255;
+                            percent = parseInt(percent);
+
+                            this.$emit('percent', percent);
+                        }
+                    },
+
+                    created() {
+                        this.$nextTick(() => {
+                            this.offsetWidth = this.$refs['sliber'].offsetWidth;
+                        })
+                    },
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

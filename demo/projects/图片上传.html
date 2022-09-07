@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片上传</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            list-style-type: none;
+        }
+
+        body {
+            background-color: #eee;
+        }
+
+        .container-box {
+            background-color: #f3f3f3;
+            width: 600px;
+            height: 200px;
+            margin: 80px auto;
+            border: 1px solid #e3e3e3;
+            box-shadow: 0 0 5px 5px #e3e3e3;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .upload-box {
+            width: 600px;
+            height: 160px;
+            display: flex;
+        }
+
+        .upload {
+            width: 140px;
+            height: 140px;
+            border: 1px dotted #d3d3d3;
+            margin: 10px;
+            background-image: url('./assets/images/add_img.png');
+            background-repeat: no-repeat;
+            background-position: 50% 20%;
+            position: relative;
+        }
+
+        #inputBox {
+            width: 100%;
+            height: 40px;
+            opacity: 0;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .upload-text {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            color: #fff;
+            background-color: #00b7ee;
+            cursor: pointer;
+        }
+
+        .upload-text:hover {
+            background-color: #00a2d4;
+        }
+
+        .preview {
+            background-color: #fff;
+            height: 140px;
+            flex: 1;
+            margin: 10px;
+            margin-left: 0;
+            border: 1px dotted #d3d3d3;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            align-items: center;
+            overflow: auto;
+        }
+
+        .preview img {
+            width: 80px;
+            height: 80px;
+            cursor: pointer;
+        }
+
+        .preview li {
+            position: relative;
+            border: 1px solid skyblue;
+        }
+
+        .preview .del {
+            display: block;
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            border-bottom-left-radius: 30px;
+            text-align: right;
+            font-size: 16px;
+            line-height: 16px;
+            background-color: skyblue;
+            cursor: pointer;
+        }
+
+        .state-box {
+            background-color: #fff;
+            width: 600px;
+            height: 40px;
+            border-top: 1px solid #d3d3d3;
+            padding-right: 10px;
+            font-size: 14px;
+            color: #909090;
+            display: flex;
+        }
+
+        .prompt {
+            flex: 6;
+            text-indent: 20px;
+            line-height: 40px;
+        }
+
+        .btn {
+            flex: 1;
+            border: 1px solid #c3c3c3;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            align-self: center;
+            margin-right: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .uploading {
+            background-color: #00b7ee;
+            color: #fff;
+        }
+
+        .choose:hover {
+            color: #333;
+            border: 1px solid #333;
+        }
+
+        .uploading:hover {
+            background-color: #00a2d4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container-box">
+        <div class="upload-box">
+            <div class="upload">
+                <input type="file" id="inputBox" accept=".jpg, .jpeg, .png" multiple>
+                <div class="upload-text">点击选择文件</div>
+            </div>
+            <!-- <div class="preview"></div> -->
+            <ul class="preview">
+
+            </ul>
+        </div>
+        <div class="state-box">
+            <label class="prompt">选中0张文件,共0B</label>
+            <span class="choose btn">继续选择</span>
+            <span class="uploading btn">开始上传</span>
+        </div>
+    </div>
+
+    <script>
+        class Upload {
+            constructor() {
+                this.size = 0,
+                    this.num = 0
+            }
+            clickAdd() {
+                let _this = this;
+                let sum = 0;
+                let uploadText = document.querySelector('.upload-text');
+                let inputBox = document.querySelector('#inputBox');
+                let choose = document.querySelector('.choose');
+
+                uploadText.onclick = () => {
+                    inputBox.click();
+                }
+
+                inputBox.addEventListener('change', function () {
+
+                    // Array.from(inputBox.files).map((v,i) => {
+                    //     console.log(v)
+                    //     console.log(i)
+                    //     let reader = new FileReader();
+                    //     reader.readAsDataURL(v);
+                    //     reader.onload = function() {
+                    //         console.log(this.result);
+                    //     }
+                    // })
+
+                    let prompt = document.querySelector('.prompt');
+                    for (let i = 0; i < inputBox.files.length; i++) {
+                        if (inputBox.files[i].size >= 1 * 1024 * 1024) {
+                            continue
+                        }
+                        _this.size += inputBox.files[i].size;
+                        let reader = new FileReader();
+                        reader.readAsDataURL(inputBox.files[i]);
+                        reader.onload = function () {
+                            _this.createImg(this.result, inputBox.files[i].size)
+                        }
+                        sum = i;
+                    }
+                    _this.num += sum + 1;
+                    prompt.innerHTML = `新增${_this.num}张文件,共${_this.size}B`;
+                })
+                choose.onclick = () => {
+                    inputBox.click();
+                }
+            }
+            createImg(src, size) {
+                let ul = document.querySelector('.preview');
+                let li = document.createElement('li');
+                let img = document.createElement('img');
+                let div = document.createElement('div');
+                div.className = 'del';
+                div.innerHTML = '✘';
+                img.src = src;
+                img.setAttribute('size', size);
+                li.appendChild(div);
+                li.appendChild(img);
+                ul.appendChild(li);
+
+                this.delImg();
+                this.enlarge();
+            }
+            delImg() {
+                let _this = this;
+                let del = document.querySelectorAll('.del');
+                let prompt = document.querySelector('.prompt');
+
+                Array.from(del).map(v => {
+                    v.onclick = () => {
+                        v.parentElement.remove();
+                        let img = v.nextElementSibling;
+                        _this.num--;
+                        _this.size = _this.size - img.getAttribute('size');
+
+                        prompt.innerHTML = `新增${_this.num}张文件,共${_this.size}B`;
+                    }
+                })
+            }
+            enlarge() {
+                let img = document.querySelectorAll('img');
+
+                Array.from(img).map(v => {
+                    v.onclick = () => {
+                        let body = document.querySelector('body');
+                        let bg = document.createElement('div');
+                        let img = document.createElement('img');
+                        img.src = v.src;
+                        bg.style = 'width:100vw;height:100vh;background-color:rgba(0,0,0,.2);position:absolute;top:0;left:0;display:flex;justify-content:center;align-items:center;'
+                        bg.appendChild(img);
+                        body.appendChild(bg);
+
+                        bg.onclick = () => {
+                            bg.remove();
+                        }
+                    }
+                })
+            }
+        }
+
+        let upload = new Upload();
+        upload.clickAdd();
+    </script>
+</body>
+
+</html>

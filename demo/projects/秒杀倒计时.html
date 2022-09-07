@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秒杀</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        .page {
+            background-color: #eee;
+            display: flex;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .page .countdown {
+            width: 380px;
+            height: 520px;
+            background-image: url(./assets/images/countdown.png);
+            margin: auto;
+            color: #fff;
+            position: relative;
+        }
+
+        .page .countdown h1 {
+            font-size: 50px;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .page .countdown p span {
+            font-size: 30px;
+            font-weight: bold;
+            vertical-align: -3px;
+        }
+
+        .page .countdown p {
+            font-size: 22px;
+            text-align: center;
+            margin-top: 190px;
+        }
+
+        .page .countdown .time {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        .page .countdown .time span {
+            background-color: #000;
+            padding: 0 5px;
+            margin: 12px;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page">
+        <div class="countdown">
+            <h1>京东秒杀</h1>
+
+            <p><span>16:00</span> 点场 倒计时</p>
+
+            <div class="time">
+                <span>00</span>:<span>13</span>:<span>21</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class Seckill {
+            timing() {
+                let date = new Date();
+                let hours = date.getHours();
+                let mimutes = date.getMinutes();
+                let seconds = date.getSeconds();
+
+                let nexthour = document.querySelector('.countdown p span');
+                let residue = document.querySelectorAll('.countdown .time span');
+
+                hours = hours % 2 == 0 ? hours : hours - 1;
+                nexthour.innerHTML = `${hours}:00`;
+
+                // 获取到达目标时间戳之间的数值
+                let targetTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hours + 2, 0, 0);
+                let target = targetTime.getTime();
+                let now = date.getTime();
+                let timestamp = target - now;
+                console.log(timestamp);
+
+                // 剩余时间计算
+                let hour = Math.floor(timestamp / 1000 / 60 / 60);
+                hour = hour.toString().padStart(2, '0');
+                let mimute = Math.floor(timestamp / 1000 / 60 % 60);
+                mimute = mimute.toString().padStart(2, '0');
+                let second = Math.floor(timestamp / 1000 % 60)
+                second = second.toString().padStart(2, '0');
+                residue[0].innerHTML = `${hour}`;
+                residue[1].innerHTML = `${mimute}`;
+                residue[2].innerHTML = `${second}`;
+            }
+        }
+
+        let seckill = new Seckill();
+        seckill.timing();
+        setInterval(() => {
+            seckill.timing();
+        }, 1000);
+    </script>
+</body>
+
+</html>

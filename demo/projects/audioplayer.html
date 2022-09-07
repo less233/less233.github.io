@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./assets/css/audioplayer.css">
+    <script src="./assets/js/audioplayer.js"></script>
+    
+    <title>CDmusic</title>
+</head>
+<body>
+
+    <div class="contain">
+        <div class="audio">
+            <div class="bg"></div>
+            <div class="disk">
+                <div class="singer"></div>
+                <div class="cdtou"></div>
+            </div>
+
+            <div class="details">
+                <div class="name"></div>
+                <div class="singername"></div>
+                <div class="controlsbox">
+                    <div class="key">
+                        <div class="controls">
+                            <span class="iconfont" id="previouw">&#xe60d;</span>
+                            <span class="iconfont" id="play">&#xe60e;</span>
+                            <span class="iconfont" id="next">&#xe610;</span>
+                            <span class="iconfont" id="loop">&#xe611;</span>
+                        </div>
+                        <div class="volume">
+                            <span class="iconfont">&#xe612;</span>
+                            <input type="range">
+                        </div>
+                    </div>
+
+                    <div class="progressbar">
+                        <input type="range">
+                        <div class="time">
+                            <span class="start">00:00</span>
+                            <span class="stop">00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="list">
+            <ul>
+
+            </ul>
+        </div>
+
+        <audio controls id="audio" preload="auto" src="https://music.163.com/song/media/outer/url?id=5240533"></audio>
+    </div>
+
+</body>
+</html>

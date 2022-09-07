@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>滑块验证</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+
+        .volid-box {
+            width: 450px;
+            height: 370px;
+            margin: 50px auto;
+            border: 1px solid #eee;
+            box-shadow: 0 0 5px 0 #dbdbdb;
+        }
+
+        .title {
+            background-color: #eee;
+            font-size: 18px;
+            font-weight: 300;
+            padding: 16px 20px;
+            border-bottom: 1px solid #dbdbdb;
+        }
+
+        .volid-bg {
+            background-image: url('./assets/images/sliderbg.png');
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            width: 390px;
+            height: 219px;
+            margin: 10px auto 5px;
+            border: 1px solid #dbdbdb;
+            position: relative;
+        }
+
+        .puzzle-block {
+            background-image: url('./assets/images/sliderbg.png');
+            background-repeat: no-repeat;
+            background-size: 390px 219px;
+            background-position: 0 0;
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .empty-block {
+            background-color: #fff;
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            top: 0;
+            left: calc(100% - 50%);
+        }
+        
+        .volid-slider {
+            width: 390px;
+            height: 45px;
+            margin: 10px auto;
+            border: 1px solid #dbdbdb;
+            background-color: #eee;
+            text-align: center;
+            line-height: 45px;
+            position: relative;
+        }
+
+        .sliding-block {
+            background-color: #fff;
+            width: 45px;
+            height: 45px;
+            box-shadow: 0 0 5px 0 #eee;
+            text-align: center;
+            line-height: 45px;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .mask {
+            background-color: skyblue;
+            width: 0;
+            height: 45px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="volid-box">
+        <div class="title">请完成安全验证</div>
+        <div class="volid-bg">
+            <div class="empty-block"></div>
+            <div class="puzzle-block"></div>
+        </div>
+        <div class="volid-slider">
+            向右滑动
+            <div class="mask"></div>
+            <div class="sliding-block">→</div>
+        </div>
+    </div>
+
+    <script>
+        let puzzle = {
+            X : 0,
+            Y : 0,
+            left : 0,
+            // 滑块条volidSlider的offsetx
+            offsetX : 0,
+            // 滑块slidingBlock的offsetx
+            onoffsetX : 0,
+            // 滑块slidingBlock的offsetx最大值
+            onoffsetXmax : 0,
+            
+            random : (min,max) => Math.floor(Math.random()*(max-min) + min),
+
+            sliding : () => {
+                let volidSlider = document.querySelector('.volid-slider');
+                let slidingBlock = document.querySelector('.sliding-block');
+                let mask = document.querySelector('.mask');
+
+                let volidBg = document.querySelector('.volid-bg');
+                let emptyBlock = document.querySelector('.empty-block');
+                let puzzleBlock = document.querySelector('.puzzle-block');
+
+                puzzle.X = puzzle.random(volidBg.offsetWidth/2,volidBg.offsetWidth-emptyBlock.offsetWidth);
+                puzzle.Y = puzzle.random(0,volidBg.offsetHeight-emptyBlock.offsetHeight);
+
+                emptyBlock.style.left = puzzle.X + 'px';
+                emptyBlock.style.top = puzzle.Y + 'px';
+                puzzleBlock.style.top = puzzle.Y + 'px';
+                puzzleBlock.style.backgroundPosition = -puzzle.X + 'px ' + -puzzle.Y + 'px';
+
+                slidingBlock.onmousedown = event => {
+                    // console.log(event);
+
+                    puzzle.onoffsetX = event.offsetX;
+                    
+                    window.onmousemove = event => {
+                        // console.log(event);
+
+                        puzzle.offsetX = volidSlider.offsetLeft;
+                        puzzle.left = event.pageX - puzzle.offsetX - puzzle.onoffsetX;
+                        puzzle.onoffsetXmax = volidSlider.offsetWidth - slidingBlock.offsetWidth;
+
+                        if ( puzzle.left <= 0 ) {
+                            puzzle.left = 0;
+                        }
+
+                        if ( puzzle.left >= puzzle.onoffsetXmax ) {
+                            puzzle.left = puzzle.onoffsetXmax
+                        }
+
+                        slidingBlock.style.left = puzzle.left + 'px';
+                        mask.style.width = puzzle.left + 'px';
+                        puzzleBlock.style.left = puzzle.left + 'px';
+                    }
+                }
+
+                window.onmouseup = () => {
+                    window.onmousemove = null;
+
+                    let err = puzzle.left - puzzle.X;
+                    if ( err >= -5 && err <= 5 ) {
+                        slidingBlock.onmousedown = null;
+                        slidingBlock.innerHTML = '✔';
+                        slidingBlock.style.color = 'lightgreen';
+                    } else {
+                        puzzle.left = 0;
+                        slidingBlock.style.left = puzzle.left + 'px';
+                        mask.style.width = puzzle.left + 'px';
+                        puzzleBlock.style.left = puzzle.left + 'px';
+                    }
+                };
+            }
+        }
+        
+        puzzle.sliding();
+    </script>
+</body>
+</html>

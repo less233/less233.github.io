@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>拼图</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        ul {
+            width: 500px;
+            height: 500px;
+            list-style-type: none;
+            border: 1px solid #f01ef3;
+            position: relative;
+        }
+
+        @media (max-width: 625px) {
+            ul {
+                width: 300px;
+                height: 300px;
+            }
+        }
+        ul li {
+            background-image: url("./assets/images/jq22.jpg");
+            border-radius: 5px;
+            box-shadow: 0 0 0 3px white inset;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: all .3s;
+        }
+
+        .controls {
+            width: 100px;
+            margin-left: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: space-around;
+        }
+
+        button {
+            width: 100px;
+            height: 30px;
+            margin: 10px 0; 
+            cursor: pointer;
+            outline: none;
+            border: none;
+            background-color: slateblue;
+            color: #f0f0f0;
+        }
+
+        select {
+            width: 100px;
+            height: 30px;
+        }
+    </style>
+
+</head>
+<body>
+    <ul class="puzzle">
+
+    </ul>
+
+    <div class="controls">
+        <button>洗牌</button>
+        <select>
+            <option value="2">2x2</option>
+            <option value="4">4x4</option>
+            <option value="6">6x6</option>
+            <option value="9">9x9</option>
+        </select>
+        <label></label>
+    </div>
+
+    <script>
+
+        var _this = null;
+        function Puzzle(map,size) {
+            this.size = size || 2;
+            this.map = document.querySelector(map);
+
+            this.cards = null;
+            this.num = 0;
+            _this = this;
+        }
+
+        Puzzle.prototype.show = function() {
+            this.map.innerHTML = '';
+
+            for (var i = 0; i < this.size*this.size; i ++ ) {
+                var li = document.createElement('li');
+                li.style.width = 100 / this.size + '%';
+                li.style.height = 100 / this.size + '%';
+
+                li.style.backgroundPosition = (i%this.size) * -100 + '% ' + Math.floor(i/this.size) * -100 + '%';
+
+                li.style.left = (i%this.size) * (100/this.size) + '%';
+                li.style.top = Math.floor(i/this.size) * (100/this.size) + '%';
+
+                li.style.backgroundSize = this.size * 100 + '% auto';
+                
+                li.draggable = 'true';
+
+                li.id = 'card' + i;
+                
+                this.map.appendChild(li);
+            }
+        }
+
+        Puzzle.prototype.wash = function() {
+            // console.log('洗牌');
+            document.querySelector('label').innerHTML = '';
+            this.cards = this.map.querySelectorAll('li');
+            
+            function random() {
+                return Math.floor(Math.random()*this.size*this.size);
+            }
+
+            var arr = [];
+            for (var i = 0; i < this.size*this.size; i ++ ) {
+                arr.push(i);
+            }
+
+            var tmp = [];
+            for (var i = 0; i < this.size*this.size; i ++ ) {
+                tmp.push(arr.splice(Math.floor(Math.random()*arr.length),1)[0]);
+            }
+
+            this.cards.forEach(function(val,ind) {
+                val.style.left = (tmp[ind]%_this.size) * (100/_this.size) + '%';
+                val.style.top = Math.floor(tmp[ind]/_this.size) * (100/_this.size) + '%';
+            })
+        }
+
+        Puzzle.prototype.drag = function() {
+            this.cards = this.map.querySelectorAll('li');
+
+            this.cards.forEach(function(val,ind) {
+                val.ondragstart = function(event) {
+                    event.dataTransfer.setData('text',event.target.id);
+                };
+
+                val.ondragover = function(event) {
+                    event.preventDefault();
+                };
+
+                val.ondrop = function(event) {
+                    console.log(_this.num);
+                    _this.num ++;
+                    var e1 = event.target;
+                    var e2 = document.getElementById(event.dataTransfer.getData('text'));
+
+                    var tmp = {
+                        top : e1.style.top,
+                        left : e1.style.left
+                    };
+
+                    e1.style.top = e2.style.top;
+                    e1.style.left = e2.style.left;
+
+                    e2.style.top = tmp.top;
+                    e2.style.left = tmp.left;
+
+                    var check = Array.prototype.every.call(_this.cards,function(val,ind){
+                        return (
+                            parseInt(val.style.top) == parseInt(Math.floor(ind/_this.size) * (100/_this.size) + '%') && parseInt(val.style.left) == parseInt((ind%_this.size) * (100/_this.size) + '%')
+                        );
+                    });
+
+                    if (check) {
+                        console.log('成功');
+                        document.querySelector('label').innerHTML = '拼图成功,步数'+_this.num;
+                    }
+                }
+            })
+        }
+
+
+        var puzzle = new Puzzle('.puzzle');
+        puzzle.show();
+        puzzle.drag();
+
+        var btn = document.querySelector('button');
+        btn.onclick = function() {
+            puzzle.wash();
+        }
+
+        var select = document.querySelector('select');
+        select.onchange = function() {
+            document.querySelector('label').innerHTML = '';
+            var size = select.value;
+            puzzle = new Puzzle('.puzzle',size);
+            puzzle.show();
+            puzzle.drag();
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D柱形统计表</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            font-family: 'Asar', serif;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            background: linear-gradient(to top,rgba(127, 136, 207),rgb(173, 188, 176));
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            perspective: 1500px;
+            transform-style: preserve-3d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 250px;
+            height: 300px;
+            background-image: url("./assets/images/bg.jpg");
+            background-size: cover;
+            border-radius: 10px;
+            box-shadow: 0 0 10px 0px rgba(0, 0, 0, .7);
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            transition: all .6s;
+            transform-style: preserve-3d;
+        }
+
+        .bgp {
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            border-radius: 10px;
+            position: absolute;
+            
+            transition: all .6s;
+            transform: translateZ(-20px);
+        }
+
+        .shade {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.12);
+            border-radius: 10px;
+            position: absolute;
+
+            transition: all .6s;
+        }
+
+        .text {
+            color: white;
+            
+        }
+
+        h2 {
+            font-size: 30px;
+            line-height: 45px;
+            transform: translateZ(60px);
+            transition: all .6s;
+        }
+
+        p {
+            transition: all .6s;
+            transform: translateZ(50px);
+        }
+
+        h3 {
+            font-size: 28px;
+            transition: all .6s;
+            opacity: .8;
+        }
+
+        .chart {
+            /* background-color: red; */
+            width: 100%;
+            height: 50px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-style: preserve-3d;
+        }
+
+        .bar {
+            background-color: #fff;
+            width: 16px;
+            height: 16px;
+            margin: 7px;
+
+            transform-style: preserve-3d;
+            transform: rotateZ(-45deg);
+        }
+
+        .bar span {
+            background: linear-gradient(to right, #a3bacc,#cbc4ca);
+            display: block;
+            width: 0px;
+            height: 16px;
+            text-align: right;
+            overflow: hidden;
+
+            transform-origin: left;
+            transform: rotateY(-90deg);
+            transition: all .6s;
+        }
+
+        .bar::before {
+            content: "";
+            background: linear-gradient(to right, #a3bacc,#cbc4ca);
+            display: block;
+            width: 0px;
+            height: 16px;
+            position: absolute;
+
+            transform-origin: left;
+            transform: rotateY(-90deg) rotateX(-90deg) translateY(8px) translateZ(8px);
+            transition: all .6s;
+        }
+
+        .bar::after {
+            background-color: #e6cece;
+            content: "";
+            display: block;
+            width: 16px;
+            height: 16px;
+
+            transform: translateY(-16px) translateZ(0px);
+            transition: all .6s;
+        }
+
+        @media (min-height: 600px) {
+            .card {
+                width: 400px;
+                height: 550px;
+                border-radius: 15px;
+                box-shadow: 0 0 15px 0px rgba(0, 0, 0, .7);
+            }
+
+            .bgp {
+                width: 100%;
+                height: 100%;
+                border-radius: 15px;
+                background-color: #000;
+            }
+
+            .shade {
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0,0,0,.12);
+                border-radius: 15px;
+            }
+
+            h2 {
+                font-size: 40px;
+                line-height: 60px;
+            }
+
+            p {
+                font-size: 20px;
+            }
+
+            h3 {
+                font-size: 40px;
+            }
+
+            .chart {
+                height: 80px;
+            }
+        }
+
+        .changecard {
+            transform: rotateX(65deg) translate3d(0px,100px,-50px);
+        }
+
+        .changebgp {
+            transform: translateZ(-20px);
+            box-shadow: 0 0 30px 5px rgba(0, 0, 0, 1);
+        }
+
+        .changeshade {
+            background-color: rgba(49, 55, 82,.65);
+        }
+
+        .steps {
+            opacity: 0;
+        }
+
+        .num {
+            transform: translateZ(35px) translateY(70px);
+        }
+
+        .width200 {
+            width: 200px;
+        }
+
+        .width100 {
+            width: 100px;
+        }
+
+        .width150 {
+            width: 150px;
+        }
+
+        .width240 {
+            width: 240px;
+        }
+
+        .width70 {
+            width: 70px;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="page">
+        <div class="box">
+            <div class="card">
+                <div class="shade"></div>
+                <div class="bgp"></div>
+
+                <h2 class="text">STEPS</h2>
+                <p class="text">THIS WEEK</p>
+                <div class="chart">
+                    <div class="bar bar1"><span>20,000</span></div>
+                    <div class="bar bar2"><span>10,000</span></div>
+                    <div class="bar bar3"><span>15,000</span></div>
+                    <div class="bar bar4"><span>24,000</span></div>
+                    <div class="bar bar5"><span>7,000</span></div>
+                    <div class="bar bar6"><span>7,000</span></div>
+                    <div class="bar bar7"><span>10,000</span></div>
+                </div>
+                <h3 class="text">93,000</h3>
+            </div>    
+        </div>
+    </div>
+</body>
+
+<script>
+    let page = document.querySelector('.page');
+    let card = document.querySelector('.card');
+    let shade = document.querySelector('.shade');
+    let bgp = document.querySelector('.bgp');
+    let h2 = document.querySelector('h2');
+    let p = document.querySelector('p');
+    let h3 = document.querySelector('h3');
+    let span = document.querySelectorAll('span');
+    let bars = document.querySelectorAll('.bar');
+
+    let flag = true;
+    let arr = [200,100,150,240,70,70,100];
+
+    page.addEventListener('click', change);
+
+    function change () {
+        card.classList.toggle('changecard')
+        bgp.classList.toggle('changebgp')
+        shade.classList.toggle('changeshade')
+        h2.classList.toggle('steps');
+        p.classList.toggle('steps');
+        h3.classList.toggle('num');
+
+        if (flag) {
+            flag = !flag;
+            
+            document.styleSheets[0].addRule('.bar1::before','width:'+arr[0]+'px');
+            document.styleSheets[0].addRule('.bar2::before','width:'+arr[1]+'px');
+            document.styleSheets[0].addRule('.bar3::before','width:'+arr[2]+'px');
+            document.styleSheets[0].addRule('.bar4::before','width:'+arr[3]+'px');
+            document.styleSheets[0].addRule('.bar5::before','width:'+arr[4]+'px');
+            document.styleSheets[0].addRule('.bar6::before','width:'+arr[5]+'px');
+            document.styleSheets[0].addRule('.bar7::before','width:'+arr[6]+'px');
+
+            document.styleSheets[0].addRule('.bar1::after','transform: translateY(-16px) translateZ('+arr[0]+'px);');
+            document.styleSheets[0].addRule('.bar2::after','transform: translateY(-16px) translateZ('+arr[1]+'px);');
+            document.styleSheets[0].addRule('.bar3::after','transform: translateY(-16px) translateZ('+arr[2]+'px);');
+            document.styleSheets[0].addRule('.bar4::after','transform: translateY(-16px) translateZ('+arr[3]+'px);');
+            document.styleSheets[0].addRule('.bar5::after','transform: translateY(-16px) translateZ('+arr[4]+'px);');
+            document.styleSheets[0].addRule('.bar6::after','transform: translateY(-16px) translateZ('+arr[5]+'px);');
+            document.styleSheets[0].addRule('.bar7::after','transform: translateY(-16px) translateZ('+arr[6]+'px);');
+
+            for ( let i = 0; i < arr.length; i ++ ) {
+                span[i].style.width = arr[i] + 'px';
+                bars[i].style.transform = 'rotateZ(-60deg)';
+            }
+
+            return
+        }
+
+        if (!flag) {
+            flag = !flag;
+
+            for ( let i = 0; i < arr.length; i ++ ) {
+                span[i].style.width = 0 + 'px';
+                document.styleSheets[0].addRule('.bar::before','width:0px');
+                document.styleSheets[0].addRule('.bar::after','transform: translateY(-16px) translateZ(0px);');
+                bars[i].style.transform = 'rotateZ(-45deg)';
+            }
+
+            return
+        }
+    }
+</script>
+
+</html>
