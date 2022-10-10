@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "serve": "http-server ./webgl/earth.html -p 8000"
+  },
+  "dependencies": {
+    "three": "^0.144.0"
+  }
+}
