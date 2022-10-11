@@ -2,11 +2,10 @@
 const path = require('path')
 const utils = require('./utils')
 const webpack = require('webpack')
-const config = require('../config')
 const merge = require('webpack-merge')
-const baseWebpackConfig = require('./webpack.base.conf')
+const baseWebpackConfig = require('./webpack.base.config')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+// const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
 
 function resolve(dir) {
@@ -20,38 +19,34 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   mode: 'development',
   module: {
     rules: utils.styleLoaders({
-      sourceMap: config.dev.cssSourceMap,
+      sourceMap: false,
       usePostCSS: true
     })
   },
-  // cheap-module-eval-source-map is faster for development
-  devtool: config.dev.devtool,
+  devtool: 'source-map',
 
-  // these devServer options should be customized in /config/index.js
   devServer: {
-    clientLogLevel: 'warning',
     historyApiFallback: true,
     hot: true,
     compress: true,
-    host: HOST || config.dev.host,
-    port: PORT || config.dev.port,
-    open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
-    publicPath: config.dev.assetsPublicPath,
-    proxy: config.dev.proxyTable,
-    quiet: true, // necessary for FriendlyErrorsPlugin
-    watchOptions: {
-      poll: config.dev.poll
-    }
+    host: HOST || 'localhost',
+    port: PORT || 8080,
+    open: false,
+    client: {
+      overlay: { warnings: false, errors: true },
+      logging: 'warn'
+    },
+    static: {
+      publicPath: '/',
+      watch: true
+    },
+    proxy: {}
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': require('../config/dev.env')
+      'process.env': require('../config/env')
     }),
     new webpack.HotModuleReplacementPlugin(),
-    // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: 'index.html',
@@ -59,38 +54,32 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       favicon: resolve('favicon.ico'),
       title: 'vue-element-admin',
       templateParameters: {
-        BASE_URL: config.dev.assetsPublicPath + config.dev.assetsSubDirectory,
+        BASE_URL: '/static',
       },
     }),
   ]
 })
 
 module.exports = new Promise((resolve, reject) => {
-  portfinder.basePort = process.env.PORT || config.dev.port
+  portfinder.basePort = process.env.PORT || 8080
   portfinder.getPort((err, port) => {
     if (err) {
       reject(err)
     } else {
-      // publish the new Port, necessary for e2e tests
       process.env.PORT = port
-      // add port to devServer config
       devWebpackConfig.devServer.port = port
-
-      // Add FriendlyErrorsPlugin
-      devWebpackConfig.plugins.push(
-        new FriendlyErrorsPlugin({
-          compilationSuccessInfo: {
-            messages: [
-              `Your application is running here: http://${
-                devWebpackConfig.devServer.host
-              }:${port}`
-            ]
-          },
-          onErrors: config.dev.notifyOnErrors
-            ? utils.createNotifierCallback()
-            : undefined
-        })
-      )
+      // devWebpackConfig.plugins.push(
+      //   new FriendlyErrorsPlugin({
+      //     compilationSuccessInfo: {
+      //       messages: [
+      //         `Your application is running here: http://${
+      //           devWebpackConfig.devServer.host
+      //         }:${port}`
+      //       ]
+      //     },
+      //     onErrors: undefined
+      //   })
+      // )
 
       resolve(devWebpackConfig)
     }
