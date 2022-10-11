@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="../assets/js/three.js"></script>
+    <style>
+      * {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="importmap">
+      {
+        "imports": {
+          "WebGL": "../assets/js/webgl.js",
+          "three": "../assets/js/three.module.js",
+          "GLTFLoader": "../assets/js/GLTFLoader.js"
+        }
+      }
+    </script>
+    <script type="module">
+      import WebGL from 'WebGL';
+      import { GLTFLoader } from 'GLTFLoader';
+
+      var renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      var camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        2000
+      );
+      camera.position.set(0, 0, 100);
+      camera.lookAt(0, 0, 0);
+
+      var scene = new THREE.Scene();
+
+      var geometry = new THREE.BoxGeometry(1, 1, 1);
+      var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      var cube = new THREE.Mesh(geometry, material);
+
+      const material2 = new THREE.LineBasicMaterial( { color: 0x0000ff } );
+      const points = [];
+      points.push( new THREE.Vector3( - 10, 0, 0 ) );
+      points.push( new THREE.Vector3( 0, 10, 0 ) );
+      points.push( new THREE.Vector3( 10, 0, 0 ) );
+      const geometry2 = new THREE.BufferGeometry().setFromPoints( points );
+      const line = new THREE.Line( geometry2, material2 );
+
+      scene.add(cube);
+      scene.add(line);
+      const loader = new GLTFLoader();
+      loader.load( '../assets/DamagedHelmet/glTF/DamagedHelmet.gltf', function ( gltf ) {
+        console.log('gltf', gltf)
+        scene.add( gltf.scene );
+      },
+      // called while loading is progressing
+      function ( xhr ) {
+
+        console.log(xhr, ( xhr.loaded / xhr.total * 100 ) + '% loaded' );
+
+      }, 
+      function ( error ) {
+
+        console.error( error );
+
+      } );
+      function render() {
+        requestAnimationFrame(render);
+        cube.rotation.x += 0.1;
+        cube.rotation.y += 0.1;
+        renderer.render(scene, camera);
+      }
+      if (WebGL.isWebGLAvailable()) {
+        // Initiate function or other initializations here
+        // animate();
+        render();
+        console.log("render success")
+      } else {
+          const warning = WebGL.getWebGLErrorMessage();
+          document.getElementById('container').appendChild(warning);
+      }
+    </script>
+  </body>
+</html>
