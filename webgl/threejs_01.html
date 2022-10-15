@@ -18,7 +18,7 @@
         "imports": {
           "WebGL": "../assets/js/webgl.js",
           "three": "../assets/js/three.module.js",
-          "GLTFLoader": "../assets/js/GLTFLoader.js"
+          "GLTFLoader": "../assets/js/loaders/GLTFLoader.js"
         }
       }
     </script>
@@ -56,7 +56,7 @@
       scene.add(cube);
       scene.add(line);
       const loader = new GLTFLoader();
-      loader.load( '../assets/DamagedHelmet/glTF/DamagedHelmet.gltf', function ( gltf ) {
+      loader.load( '../model/DamagedHelmet/glTF/DamagedHelmet.gltf', function ( gltf ) {
         console.log('gltf', gltf)
         scene.add( gltf.scene );
       },
